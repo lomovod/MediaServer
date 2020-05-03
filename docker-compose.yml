@@ -1,0 +1,36 @@
+﻿version: '3.0'
+
+volumes:
+  transmission_config:
+
+networks:
+  torrent_client_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.201.0/29"
+
+services:
+  torrent-client:
+    build:
+      context: torrent-client\.
+      dockerfile: Dockerfile
+    cap_add: 
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    restart: always
+    env_file:
+      - setup.env
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4 
+    ports:
+      - "9091:9091"
+    networks:
+      torrent_client_net:
+        ipv4_address: 192.168.201.2
+    volumes:
+      - <openvpn_config_path>:/config/openvpn:ro
+      - <media_library_path>:/data
+      - transmission_config:/config/transmission
