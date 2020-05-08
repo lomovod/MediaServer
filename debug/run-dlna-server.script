@@ -1,0 +1,1 @@
+﻿docker run --rm -d -p 8200:8200 -p 1900:1900 --sysctl net.ipv4.icmp_echo_ignore_broadcasts=0 --name dlna -v <mount_point>:/data dlna-server
