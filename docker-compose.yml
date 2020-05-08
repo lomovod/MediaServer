@@ -1,7 +1,8 @@
-﻿version: '3.0'
+﻿version: '3.4'
 
 volumes:
   transmission_config:
+  minidlna_config:
 
 networks:
   torrent_client_net:
@@ -34,3 +35,15 @@ services:
       - <openvpn_config_path>:/config/openvpn:ro
       - <media_library_path>:/data
       - transmission_config:/config/transmission
+  dlna-server:
+    build:
+      context: dlna-server\.
+      dockerfile: Dockerfile
+      network: host
+    restart: always
+    ports:
+      - 8200:8200
+      - 1900:1900
+    volumes:
+      - <media_library_path>:/data:ro
+      - minidlna_config:/config/minidlna
